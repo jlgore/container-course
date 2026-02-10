@@ -254,6 +254,15 @@ The `/info` endpoint now returns real Kubernetes metadata — the actual pod nam
 kill %1
 ```
 
+> **Heads up:** When you run `kubectl port-forward ... &`, it stays running in the background until you explicitly kill it. If you forget `kill %1` before starting a new port-forward on the same port, you'll get `bind: address already in use`. If that happens:
+> ```bash
+> # Kill all backgrounded jobs in this shell
+> kill %1 %2 %3 2>/dev/null
+> # Or find and kill whatever is holding the port
+> kill $(lsof -ti :8080)
+> ```
+> This will come up again in Parts 4 and 5 — always kill the previous port-forward before starting a new one.
+
 ---
 
 ## Part 4: Create a Service
