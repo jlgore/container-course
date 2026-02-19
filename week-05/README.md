@@ -296,6 +296,8 @@ Use this mapped reinforcement set (all exercises below currently exist in `gymct
 ### Reference
 - [Helm Documentation](https://helm.sh/docs/)
 - [PersistentVolumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)
+- [StorageClasses](https://kubernetes.io/docs/concepts/storage/storage-classes/)
+- [local-path-provisioner](https://github.com/rancher/local-path-provisioner) — the provisioner used in kind/k3s
 - [Vault on Kubernetes](https://developer.hashicorp.com/vault/docs/platform/k8s)
 - [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
 - [SOPS](https://github.com/getsops/sops)
