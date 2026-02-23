@@ -1,3 +1,8 @@
+![Lab 05 CoreDNS Troubleshooting Sprint](../../../assets/generated/week-06-lab-05/hero.png)
+![Lab 05 CoreDNS diagnosis workflow](../../../assets/generated/week-06-lab-05/flow.gif)
+
+---
+
 # Lab 5: CoreDNS Troubleshooting Sprint (CKA Extension)
 
 **Time:** 35 minutes  
@@ -64,6 +69,26 @@ DNS failure is one of the hardest cluster issues to diagnose because:
 - It's cascading — if your app can't resolve `redis`, it reports a Redis error, not a DNS error
 
 The fastest triage path is always: **can a pod resolve `kubernetes.default.svc.cluster.local`?** If not, DNS is the problem, not your app.
+
+**Baseline triage commands — run these first in any DNS incident:**
+
+```bash
+# 1. Check CoreDNS pods are Running and not restarting
+kubectl -n kube-system get pods -l k8s-app=kube-dns
+
+# 2. Resolve the canonical cluster name from inside the CoreDNS pod itself
+COREDNS=$(kubectl -n kube-system get pods -l k8s-app=kube-dns -o name | head -1)
+kubectl -n kube-system exec "$COREDNS" -- nslookup kubernetes.default.svc.cluster.local
+
+# 3. Try from a workload pod to confirm the path pods take
+kubectl run dns-probe --rm -it --image=busybox:1.36 -- nslookup kubernetes.default.svc.cluster.local
+
+# 4. Inspect the Corefile — forward directive is the most common failure point
+kubectl describe configmap coredns -n kube-system
+
+# 5. Read recent CoreDNS logs for errors (SERVFAIL, loop, plugin panics)
+kubectl -n kube-system logs deployment/coredns --tail=60
+```
 
 ### Common CoreDNS failure modes
 

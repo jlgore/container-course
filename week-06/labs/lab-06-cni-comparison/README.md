@@ -1,3 +1,8 @@
+![Lab 06 CNI Plugin Comparison](../../../assets/generated/week-06-lab-06/hero.png)
+![Lab 06 kindnet Calico Cilium comparison workflow](../../../assets/generated/week-06-lab-06/flow.gif)
+
+---
+
 # Lab 6: CNI Plugin Comparison (CKA Extension)
 
 **Time:** 45–55 minutes
