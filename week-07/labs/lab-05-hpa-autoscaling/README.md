@@ -89,10 +89,77 @@ kubectl config use-context kind-lab
 kubectl get nodes
 ```
 
-Your `student-app` Deployment from Week 4 should be running. Verify:
+### Check for student-app
+
+This lab requires a `student-app` Deployment and `student-app-svc` Service. Check if they exist:
 
 ```bash
 kubectl get deployment student-app
+kubectl get service student-app-svc
+```
+
+**If both are running, skip ahead to Part 1.**
+
+### Redeploy Week 4 (if needed)
+
+If either resource is missing, run the block below. It deploys a minimal nginx-based stand-in that behaves the same way for HPA purposes — it serves HTTP traffic, has resource requests, and is accessible via the same Service name the load generator expects.
+
+```bash
+kubectl apply -f - <<'EOF'
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: student-app
+  labels:
+    app: student-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: student-app
+  template:
+    metadata:
+      labels:
+        app: student-app
+    spec:
+      containers:
+      - name: student-app
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: student-app-svc
+  labels:
+    app: student-app
+spec:
+  selector:
+    app: student-app
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+EOF
+
+kubectl rollout status deployment/student-app --timeout=60s
+```
+
+Verify both are ready before continuing:
+
+```bash
+kubectl get deployment student-app
+kubectl get service student-app-svc
 ```
 
 ---
