@@ -502,7 +502,7 @@ Operator mindset: choose for required capability first, then optimize for observ
 
 ---
 
-## Validation Checklist
+## Verification Checklist
 
 You are done when:
 
@@ -541,7 +541,7 @@ kubectl config use-context ziyotek-prod  2>/dev/null || true
 
 ---
 
-## Reinforcement Scenario
+## Reinforcement Scenarios
 
 - `33-jerry-wrong-cni-config` — CNI misconfiguration causing pod networking failure; diagnose from node status, pod events, and CNI logs
 
