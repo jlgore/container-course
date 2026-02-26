@@ -79,10 +79,10 @@ Notice: `k8s-validate` depends only on `code-quality`, not on `build`. Kubernete
 
 ## Prerequisites
 
-You should have your fork of `container-devsecops-template` cloned locally (from Lab 1):
+You should have your fork of `devsecops-portfolio-template` cloned locally (from Lab 1):
 
 ```bash
-cd container-devsecops-template
+cd devsecops-portfolio-template
 ```
 
 Read the pipeline file before touching any tools:
@@ -333,6 +333,19 @@ Go to your fork on GitHub → **Actions** tab. Watch the pipeline run. You shoul
 Notice: the green checkmarks map exactly to the tools you just ran locally. CI is not a black box — it is the same tools, the same commands, automated and run on every commit. When CI fails, you can reproduce the failure locally with the exact command from the workflow file.
 
 Operator mindset: if you cannot reproduce a CI failure locally, you do not understand it well enough to fix it reliably.
+
+### Make your container image public
+
+After the pipeline goes green, the `push` and `update-tag` jobs will have published your image to GitHub Container Registry (GHCR) and committed the new image SHA back to `k8s/base/kustomization.yaml`.
+
+By default, GHCR packages are private. Your kind cluster has no credentials to pull a private image, so ArgoCD will fail with `ImagePullBackOff` in Lab 3 unless you make it public now.
+
+1. Go to `https://github.com/<YOUR_GITHUB_USERNAME>/devsecops-portfolio-template/pkgs/container/devops-portfolio`
+2. Click **Package settings**
+3. Scroll to **Danger Zone** → **Change visibility** → set to **Public**
+4. Confirm
+
+Notice: in production you would configure imagePullSecrets in the cluster instead of making images public. For this lab, public visibility keeps the setup simple and focused on the GitOps workflow rather than credential management.
 
 ---
 

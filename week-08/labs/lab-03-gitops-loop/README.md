@@ -81,6 +81,7 @@ You should have:
 - ArgoCD running on your kind cluster (from Lab 1)
 - Your fork of `devsecops-portfolio-template` cloned locally (from Lab 1)
 - The ArgoCD UI accessible at `localhost:8080`
+- Your GHCR package set to **public** (from Lab 2) — if you skipped this, go to `https://github.com/<YOUR_GITHUB_USERNAME>/devsecops-portfolio-template/pkgs/container/devops-portfolio` → Package settings → Change visibility → Public
 
 Verify before starting:
 
