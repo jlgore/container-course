@@ -79,7 +79,7 @@ Once the revert commit is on `main`, ArgoCD picks it up at the next reconciliati
 
 You should have:
 - ArgoCD running on your kind cluster (from Lab 1)
-- Your fork of `container-devsecops-template` cloned locally (from Lab 1)
+- Your fork of `devsecops-portfolio-template` cloned locally (from Lab 1)
 - The ArgoCD UI accessible at `localhost:8080`
 
 Verify before starting:
@@ -98,7 +98,7 @@ kubectl port-forward service/argocd-server -n argocd 8080:443 &
 
 ## Part 1: Personalize Your Portfolio
 
-Before deploying, make the content yours. In your `container-devsecops-template` clone, edit `k8s/base/configmap.yaml`:
+Before deploying, make the content yours. In your `devsecops-portfolio-template` clone, edit `k8s/base/configmap.yaml`:
 
 ```yaml
 apiVersion: v1
@@ -108,7 +108,7 @@ metadata:
 data:
   STUDENT_NAME: "<YOUR_NAME>"
   GITHUB_USERNAME: "<YOUR_GITHUB_USERNAME>"
-  GITHUB_REPO: "container-devsecops-template"
+  GITHUB_REPO: "devsecops-portfolio-template"
   BIO: "<A sentence or two about yourself>"
   VAULT_ADDR: "http://vault.default:8200"
   VAULT_SECRET_PATH: "secret/data/github-app"
@@ -135,7 +135,7 @@ Edit `argocd/application.yaml` in your fork and replace `<YOUR_GITHUB_USERNAME>`
 ```yaml
 spec:
   source:
-    repoURL: https://github.com/<YOUR_GITHUB_USERNAME>/container-devsecops-template.git
+    repoURL: https://github.com/<YOUR_GITHUB_USERNAME>/devsecops-portfolio-template.git
 ```
 
 Key fields and what they control:
@@ -163,11 +163,21 @@ Operator mindset: read every field in an Application manifest before applying it
 
 ## Part 3: Deploy via ArgoCD
 
-Apply the Application manifest:
+First, commit and push your updated `application.yaml` to your fork:
 
 ```bash
-kubectl apply -f argocd/application.yaml
+git add argocd/application.yaml
+git commit -m "configure argocd application for my fork"
+git push
 ```
+
+This is done in your `devsecops-portfolio-template` Codespace. Now switch to your **container-course Codespace** where the kind cluster is running, and apply the manifest directly from GitHub:
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/<YOUR_GITHUB_USERNAME>/devsecops-portfolio-template/main/argocd/application.yaml
+```
+
+Notice: you are applying from a URL, not a local file. This means you are pulling the manifest from the same source of truth that ArgoCD will watch — no file copying or repo cloning required in the cluster Codespace.
 
 Open the ArgoCD UI at `http://localhost:8080`. Watch the **portfolio** Application appear and begin syncing.
 
